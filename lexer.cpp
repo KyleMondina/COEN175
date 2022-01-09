@@ -116,7 +116,7 @@ static int lexan(std::string& lexbuff){
 	char ybuff;
 	std::string opbuff;
 
-	while (!std::cin.eof()){
+	while (!(std::cin.eof())){
 
 		lexbuff.clear();
 
@@ -147,18 +147,20 @@ static int lexan(std::string& lexbuff){
 
 
 
-
-
-
-
-
-
-
-
-
-
-
 int main(){
+	int token;
+	std::string lexbuff, type;
+
+	while ((token = lexan(lexbuff))!=DONE){
+		switch(token){
+			case NUMBER:
+				type = "number";
+				break;
+		}	
+		std::cout << type << " : " << lexbuff << std::endl;
+	}
+	std::cout << "hello is this program even working?" << std::endl;
+	return 0;
 
 
 }
