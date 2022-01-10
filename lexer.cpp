@@ -139,6 +139,30 @@ static int lexan(std::string& lexbuff){
 			return NUMBER;
 		}
 
+		//3.) Strings
+		if(input=='"'){
+			//start of a string
+			do{
+				lexbuff += input;
+				std::cin.get();
+				input = std::cin.peek();
+
+				//handle backslash escaping
+				if(input == '\\'){
+					lexbuff+=input;
+					std::cin.get();
+					lexbuff+=std::cin.peek();
+					std::cin.get();
+					input = std::cin.peek();
+				}
+
+			}while(input!='"');
+			//handle the next "
+			lexbuff += input;
+			std::cin.get();
+			return STRING;
+		}
+
 		
 	}
 	return DONE;
