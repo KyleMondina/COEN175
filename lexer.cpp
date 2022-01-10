@@ -186,7 +186,64 @@ static int lexan(std::string& lexbuff){
 			return CHARACTER;
 		}
 
+
+		//5.) Handle identifiers and keywords
+		//First Case: When they start with _
 		
+		if(input == '_'){
+			do {
+				lexbuff+=input;
+				std::cin.get();
+				input = std::cin.peek();
+			}while( std::isalpha(input) || std::isdigit(input) || input == '_');
+			return IDENTIFIER;
+		}
+
+		//Second case: when they could potentially be keywords
+		
+		if(std::isalpha(input)){
+			do{
+				lexbuff+=input;
+				std::cin.get();
+				input = std::cin.peek();
+			}while(input == '_' || std::isalpha(input) || std::isdigit(input));
+			
+			if(isKeyword(lexbuff)){
+				return KEYWORD;
+			}else{
+				return IDENTIFIER;
+			}
+		}
+		
+		//6.) Handle Comments
+		
+		if (input == '/'){
+			std::cin.get();
+			input = std::cin.peek();
+			
+			if(input == '*'){
+				do {
+					//process the contents
+					std::cin.get();
+					input = std::cin.peek();
+PROCESS: /*wow i hate c++ took me a while to figure this out*/ ;
+
+				}while(input != '*');
+				//process the star
+				std::cin.get();
+				input = std::cin.peek();
+				if(input != '/'){
+					goto PROCESS;
+				}
+				//finish processing the comment
+				std::cin.get();
+				input = std::cin.peek();
+			}else{
+				std::cin.putback('/');
+				input = '/';
+			}
+
+		}
 
 
 		
@@ -200,12 +257,26 @@ static int lexan(std::string& lexbuff){
 int main(){
 	int token;
 	std::string lexbuff, type;
+	//NUMBER,STRING,CHARACTER,IDENTIFIER,KEYWORD,OPERATOR,DONE,
 
 	while ((token = lexan(lexbuff))!=DONE){
 		switch(token){
 			case NUMBER:
 				type = "number";
 				break;
+			case STRING:
+				type = "string";
+				break;
+			case CHARACTER:
+				type = "character";
+				break;
+			case IDENTIFIER:
+				type = "identifier";
+				break;
+			case KEYWORD:
+				type = "keyword";
+				break;
+
 		}	
 		std::cout << type << " : " << lexbuff << std::endl;
 	}
