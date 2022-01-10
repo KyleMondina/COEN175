@@ -163,6 +163,32 @@ static int lexan(std::string& lexbuff){
 			return STRING;
 		}
 
+		//4.) Handle Characters: Exact same logic with strings
+		if(input=='\''){
+			//start of the chracter
+			do{
+				lexbuff += input;
+				std::cin.get();
+				input = std::cin.peek();
+
+				//handle backslashing escaping
+				if(input == '\\'){
+					lexbuff+=input;
+					std::cin.get();
+					lexbuff+=std::cin.peek();
+					std::cin.get();
+					input = std::cin.peek();
+				}
+			}while(input!='\'');
+			//handle the next '
+			lexbuff+=input;
+			std::cin.get();
+			return CHARACTER;
+		}
+
+		
+
+
 		
 	}
 	return DONE;
